@@ -28,11 +28,11 @@ const packageData: Package[] = [
   },
 ];
 
-const BrandsTable = () => {
+const ProductTable = () => {
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
-        <div className="flex justify-between items-center mb-4">Brands
-           <Link href={"/admin/brands/add"}> <button className="text-sm text-white bg-black p-2 rounded-xl">Add Brand</button></Link>
+        <div className="flex justify-between items-center mb-4">Products
+           <Link href={"/admin/products/add"}> <button className="text-sm text-white bg-black p-2 rounded-xl">Add Products</button></Link>
         </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -92,7 +92,7 @@ const BrandsTable = () => {
                 >
                   <div className="flex items-center justify-end space-x-3.5">
                     <button className="hover:text-primary">
-                    <Link href={"/admin/brands/edit"}>
+                    <Link href={"/admin/products/edit"}>
                         <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -171,4 +171,4 @@ const BrandsTable = () => {
   );
 };
 
-export default BrandsTable;
+export default ProductTable;
