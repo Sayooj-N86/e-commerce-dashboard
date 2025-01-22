@@ -53,7 +53,7 @@ const BrandsAdd = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Brand Add" />
+      <Breadcrumb pageName="Brand" innerPage="brands" tableLink="/admin/brands" />
 
       <div className=" gap-9 sm:grid-cols-2">
         <form onSubmit={handleSubmit(submitData)}>

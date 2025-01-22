@@ -28,7 +28,7 @@ const ACCEPTED_IMAGE_TYPES =[
     "image/webp",
 ];
 const Schema = z.object( {
-    product : z.string().nonempty({message:"required"}),
+    brand : z.string().nonempty({message:"required"}),
     imageFile :
     z
 .any()
@@ -39,7 +39,7 @@ const Schema = z.object( {
 ),
 });
 
-const ProductAdd = () => {
+const BannersAdd = () => {
     
     const { register, handleSubmit,reset,control,formState:{errors}} = useForm<TSchema>({
     resolver: zodResolver(Schema)
@@ -53,7 +53,7 @@ const ProductAdd = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Product Add" innerPage="products" tableLink="/admin/products"/>
+      <Breadcrumb pageName="Banners Add" innerPage="banners" tableLink="/admin/banners" />
 
       <div className=" gap-9 sm:grid-cols-2">
         <form onSubmit={handleSubmit(submitData)}>
@@ -63,19 +63,19 @@ const ProductAdd = () => {
             <div className="flex flex-col gap-5.5 p-6.5">
               <div>
                 <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-                  Product Name
+                  Banner Name
                 </label>
                 <input
                   type="text"
-                  {...register("product",{required:true})}
+                  {...register("brand",{required:true})}
                   placeholder="Clothes"
                   className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
                 />
-                {errors.product && (<p>{errors.product.message}</p>)}
+                {errors.brand && (<p>{errors.brand.message}</p>)}
               </div>
               <div>
                   <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-                    Product Image
+                    Banner Image
                   </label>
                   <DropzoneWrapper>
                     <Typography variant="h6" sx={{ mb: 2.5 }}>
@@ -126,4 +126,4 @@ const ProductAdd = () => {
   );
 };
 
-export default ProductAdd;
+export default BannersAdd;

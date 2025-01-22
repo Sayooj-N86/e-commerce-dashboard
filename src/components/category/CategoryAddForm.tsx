@@ -53,7 +53,7 @@ const CategoryAddForm = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Category Add" />
+      <Breadcrumb pageName="Category Add" innerPage='category' tableLink="/admin/category"/>
 
       <div className=" gap-9 sm:grid-cols-2">
         <form onSubmit={handleSubmit(submitData)}>
