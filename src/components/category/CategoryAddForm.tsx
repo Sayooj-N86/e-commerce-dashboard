@@ -19,6 +19,9 @@ import { Controller, useForm } from "react-hook-form";
 import DropzoneWrapper from "../styles/react-dropzoner/Index";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { categoryApi } from "@/api/categoryApi";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES =[
@@ -46,8 +49,23 @@ const CategoryAddForm = () => {
     })
     type TSchema = z.infer<typeof Schema>;
 
+    const router = useRouter();
+
     const submitData = async (data:any)=>{
-        console.log("::::",data)
+      try{
+        const response = await categoryApi.createCategory(data);
+        console.log(response);
+        if(response.data.success){
+          toast.success(response.data.message);
+          router.push("/admin/category");
+         
+        }
+      }
+      catch(errors: any){
+        console.log(errors);
+        toast.error(errors.response.data.message)
+      }
+       
 
     }
 
