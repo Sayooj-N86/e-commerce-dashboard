@@ -1,4 +1,3 @@
-
 import { categoryApi } from '@/api/categoryApi'
 import CategoryEdit from '@/components/category/CategoryEditForm'
 import DefaultLayout from '@/components/Layouts/DefaultLaout'
@@ -6,8 +5,7 @@ import React from 'react'
 
 async function getOneCategory(id:string) {
   const response:any = await categoryApi.getOneCategory(id);
-  
-  return response.data; 
+   return response.data; 
 }
 
 const page = async ({params}: { params: { id : string}}) => {

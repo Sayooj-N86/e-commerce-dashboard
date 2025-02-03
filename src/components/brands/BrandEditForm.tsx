@@ -19,6 +19,9 @@ import { Controller, useForm } from "react-hook-form";
 import DropzoneWrapper from "../styles/react-dropzoner/Index";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { brandApi } from "@/api/brandApi";
+import toast from "react-hot-toast";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES =[
@@ -28,25 +31,63 @@ const ACCEPTED_IMAGE_TYPES =[
     "image/webp",
 ];
 const Schema = z.object( {
-    category : z.string().nonempty({message:"required"}),
+    brand : z.string().nonempty({message:"required"}),
     imageFile :
-    z
-.any()
-.refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-.refine(
-  (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-  "Only .jpg, .jpeg, .png and .webp formats are supported.",
-),
+   z.any().refine(
+       value => {
+         const acceptedTypes = ACCEPTED_IMAGE_TYPES
+   
+         if (typeof value === 'string') {
+           return true
+         } else if (typeof value === 'object') {
+           const isTypeAccepted = acceptedTypes.includes(value?.type)
+   
+           return isTypeAccepted
+         }
+   
+         return false
+       },
+       {
+         message: 'Invalid image format'
+       }
+     ),
 });
 
-const BrandsEdit = () => {
+type props ={
+  brand:any,
+  brandId:string
+}
+const BrandsEdit = ({brand,brandId}: props) => {
     
     const { register, handleSubmit,reset,control,formState:{errors}} = useForm<TSchema>({
-    resolver: zodResolver(Schema)
-    })
+    resolver: zodResolver(Schema),
+    defaultValues: {
+      brand:brand.name,
+      imageFile:brand.image,
+    },
+    });
+  
     type TSchema = z.infer<typeof Schema>;
 
-    const submitData = async (data:any)=>{
+    const router =useRouter();
+
+
+      const submitData = async (data: any) => {
+        try{
+          const response = await brandApi.updateBrand(data ,brandId);
+          console.log(response);
+          if(response.data.success){
+            toast.success(response.data.message);
+            router.push("/admin/brand");
+           
+          }
+        }
+        catch(errors: any){
+          console.log(errors);
+          toast.error(errors.response.data.message)
+        }
+         
+
         console.log("::::",data)
 
     }
@@ -67,11 +108,11 @@ const BrandsEdit = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("category",{required:true})}
+                  {...register("brand",{required:true})}
                   placeholder="Clothes"
                   className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
                 />
-                {errors.category && (<p>{errors.category.message}</p>)}
+                {errors.brand && (<p>{errors.brand.message}</p>)}
               </div>
               <div>
                   <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">

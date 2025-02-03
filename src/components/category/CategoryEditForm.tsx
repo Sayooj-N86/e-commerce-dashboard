@@ -68,7 +68,7 @@ const CategoryEdit = ({category,categoryId}:props) => {
     defaultValues: {
       category: category.name,
       imageFile: category.image,
-      },
+      },  
   });
 const router = useRouter();
 

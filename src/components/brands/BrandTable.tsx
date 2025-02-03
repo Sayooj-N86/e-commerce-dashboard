@@ -1,5 +1,9 @@
+'use client';
+import { brandApi } from "@/api/brandApi";
 import { Package } from "@/types/package";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const packageData: Package[] = [
   {
@@ -30,6 +34,24 @@ const packageData: Package[] = [
 
 const BrandsTable = (brands:any) => {
   console.log(brands)
+
+  const router= useRouter();
+
+  async function deleteBrand(brandId : any) {
+    try {
+      const deleteBrand= await brandApi.deleteBrand(brandId);
+      if(deleteBrand.data.success){
+        toast.success(deleteBrand.data.message);
+        router.refresh();
+      }
+      if(!deleteBrand.data.success){
+        toast.error(deleteBrand.data.message);
+      }
+      } catch (errors:any) {
+        toast.error(errors.data.message);
+        }
+  }
+
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
         <div className="flex justify-between items-center mb-4">Brands
@@ -64,7 +86,7 @@ const BrandsTable = (brands:any) => {
                 >
                   <div className="flex items-center justify-end space-x-3.5">
                     <button className="hover:text-primary">
-                    <Link href={"/admin/brands/edit"}>
+                    <Link href={`/admin/brands/edit/${brands._id}`}>
                         <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -84,7 +106,9 @@ const BrandsTable = (brands:any) => {
                             </svg>
                     </Link>
                     </button>
-                    <button className="hover:text-primary">
+                    <button
+                    onClick={() => deleteBrand(brands._id)}
+                    className="hover:text-primary">
                       <svg
                         className="fill-current"
                         width="20"
