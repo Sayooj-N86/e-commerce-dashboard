@@ -19,6 +19,9 @@ import { Controller, useForm } from "react-hook-form";
 import DropzoneWrapper from "../styles/react-dropzoner/Index";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { brandApi } from "@/api/brandApi";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES =[
@@ -45,9 +48,23 @@ const BrandsAdd = () => {
     resolver: zodResolver(Schema)
     })
     type TSchema = z.infer<typeof Schema>;
+    const router = useRouter();
 
     const submitData = async (data:any)=>{
-        console.log("::::",data)
+      try{
+        const response = await brandApi.createBrand(data);
+        console.log(response);
+        if(response.data.success){
+          toast.success(response.data.message);
+          router.push("/admin/brand");
+         
+        }
+      }
+      catch(errors: any){
+        console.log(errors);
+        toast.error(errors.response.data.message)
+      }
+        // console.log("::::",data)
 
     }
 

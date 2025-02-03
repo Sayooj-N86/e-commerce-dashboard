@@ -23,7 +23,7 @@ const Breadcrumb = ({ pageName,innerPage,tableLink }: BreadcrumbProps) => {
             </Link>
           </li>
           <li className="font-medium text-primary">
-          <Link href={tableLink} >{innerPage}</Link>
+          <Link href={tableLink ?? ""} >{innerPage}</Link>
             </li>
         </ol>
       </nav>
