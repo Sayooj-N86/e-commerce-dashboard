@@ -5,39 +5,39 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-const packageData: Package[] = [
-  {
-    name: "Free package",
-    price: 0.0,
-    invoiceDate: `Jan 13,2023`,
-    status: "Paid",
-  },
-  {
-    name: "Standard Package",
-    price: 59.0,
-    invoiceDate: `Jan 13,2023`,
-    status: "Paid",
-  },
-  {
-    name: "Business Package",
-    price: 99.0,
-    invoiceDate: `Jan 13,2023`,
-    status: "Unpaid",
-  },
-  {
-    name: "Standard Package",
-    price: 59.0,
-    invoiceDate: `Jan 13,2023`,
-    status: "Pending",
-  },
-];
+// const packageData: Package[] = [
+//   {
+//     name: "Free package",
+//     price: 0.0,
+//     invoiceDate: `Jan 13,2023`,
+//     status: "Paid",
+//   },
+//   {
+//     name: "Standard Package",
+//     price: 59.0,
+//     invoiceDate: `Jan 13,2023`,
+//     status: "Paid",
+//   },
+//   {
+//     name: "Business Package",
+//     price: 99.0,
+//     invoiceDate: `Jan 13,2023`,
+//     status: "Unpaid",
+//   },
+//   {
+//     name: "Standard Package",
+//     price: 59.0,
+//     invoiceDate: `Jan 13,2023`,
+//     status: "Pending",
+//   },
+// ];
 
 const BrandsTable = (brands:any) => {
   console.log(brands)
 
   const router= useRouter();
 
-  async function deleteBrand(brandId : any) {
+  async function deleteBrand(brandId : string) {
     try {
       const deleteBrand= await brandApi.deleteBrand(brandId);
       if(deleteBrand.data.success){
@@ -48,8 +48,9 @@ const BrandsTable = (brands:any) => {
         toast.error(deleteBrand.data.message);
       }
       } catch (errors:any) {
-        toast.error(errors.data.message);
-        }
+        console.log(errors)
+        toast.error(errors.response.data.message)
+      }
   }
 
   return (
@@ -73,7 +74,7 @@ const BrandsTable = (brands:any) => {
             {brands.brands?.map((brands:any, index:number) => (
               <tr key={index}>
                 <td
-                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5 ${index === packageData.length - 1 ? "border-b-0" : "border-b"}`}
+                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5 border-b`}
                 >
                   <h5 className="text-dark dark:text-white">
                     {brands.name}
@@ -82,7 +83,7 @@ const BrandsTable = (brands:any) => {
                 </td>
                 
                 <td
-                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 ${index === packageData.length - 1 ? "border-b-0" : "border-b"}`}
+                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 border-b`}
                 >
                   <div className="flex items-center justify-end space-x-3.5">
                     <button className="hover:text-primary">

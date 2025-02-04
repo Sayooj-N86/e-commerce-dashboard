@@ -78,7 +78,7 @@ const BrandsEdit = ({brand,brandId}: props) => {
           console.log(response);
           if(response.data.success){
             toast.success(response.data.message);
-            router.push("/admin/brand");
+            router.push("/admin/brands");
            
           }
         }
