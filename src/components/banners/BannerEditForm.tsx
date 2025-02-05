@@ -39,6 +39,11 @@ const Schema = z.object( {
 ),
 });
 
+type props={
+  banner: any,
+  bannerId:string
+}
+
 const BannersEdit = () => {
     
     const { register, handleSubmit,reset,control,formState:{errors}} = useForm<TSchema>({

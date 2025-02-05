@@ -19,6 +19,10 @@ import { Controller, useForm } from "react-hook-form";
 import DropzoneWrapper from "../styles/react-dropzoner/Index";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import SelectOne from "../Dropdowns/SelectOne";
+import { useRouter } from "next/navigation";
+import { bannerApi } from "@/api/bannerApi";
+import toast from "react-hot-toast";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES =[
@@ -28,7 +32,7 @@ const ACCEPTED_IMAGE_TYPES =[
     "image/webp",
 ];
 const Schema = z.object( {
-    brand : z.string().nonempty({message:"required"}),
+    category : z.string().nonempty({message:"required"}),
     imageFile :
     z
 .any()
@@ -39,14 +43,34 @@ const Schema = z.object( {
 ),
 });
 
-const BannersAdd = () => {
+type props ={
+  _id:string,
+  name: string,
+}
+
+const BannersAdd = ({categories}:any) => {
+  console.log(categories)
     
     const { register, handleSubmit,reset,control,formState:{errors}} = useForm<TSchema>({
     resolver: zodResolver(Schema)
     })
     type TSchema = z.infer<typeof Schema>;
 
+    const router = useRouter();
     const submitData = async (data:any)=>{
+      try{
+        const response = await bannerApi.createBanner(data);
+        console.log(response);
+        if(response.data.success){
+          toast.success(response.data.message);
+          router.push("/admin/banners");
+         
+        }
+      }
+      catch(errors: any){
+        console.log(errors);
+        toast.error(errors.response.data.message)
+      }
         console.log("::::",data)
 
     }
@@ -65,13 +89,19 @@ const BannersAdd = () => {
                 <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
                   Banner Name
                 </label>
-                <input
+                {/* <input
                   type="text"
-                  {...register("brand",{required:true})}
+                  {...register("banner",{required:true})}
                   placeholder="Clothes"
                   className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+                /> */}
+                <SelectOne
+                register={register("category")}
+                name="category"
+                placeHolder="category"
+                data={categories}
                 />
-                {errors.brand && (<p>{errors.brand.message}</p>)}
+                {errors.category && (<p>{errors.category.message}</p>)}
               </div>
               <div>
                   <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
