@@ -35,12 +35,24 @@ const Schema = z.object( {
     category : z.string().nonempty({message:"required"}),
     imageFile :
     z
-.any()
-.refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-.refine(
-  (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-  "Only .jpg, .jpeg, .png and .webp formats are supported.",
-),
+    .any().refine(
+      value => {
+        const acceptedTypes = ACCEPTED_IMAGE_TYPES
+  
+        if (typeof value === 'string') {
+          return true
+        } else if (typeof value === 'object') {
+          const isTypeAccepted = acceptedTypes.includes(value?.type)
+  
+          return isTypeAccepted
+        }
+  
+        return false
+      },
+      {
+        message: 'Invalid image format'
+      }
+    ),
 });
 
 type props ={

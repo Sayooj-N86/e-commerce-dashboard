@@ -1,5 +1,9 @@
+'use client';
+import { bannerApi } from "@/api/bannerApi";
 import { Package } from "@/types/package";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 // const packageData: Package[] = [
 //   {
@@ -30,6 +34,26 @@ import Link from "next/link";
 
 const BannersTable = (banners:any) => {
   console.log(banners)
+
+  const router= useRouter();
+
+  async function deleteBanner(bannerId : string) {
+    try {
+      const deleteBanner= await bannerApi.deleteBanner(bannerId);
+      if(deleteBanner.data.success){
+        toast.success(deleteBanner.data.message);
+        router.refresh();
+      }
+      if(!deleteBanner.data.success){
+        toast.error(deleteBanner.data.message);
+      }
+      } catch (errors:any) {
+        console.log(errors)
+        toast.error(errors.response.data.message)
+      }
+  }
+
+
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
         <div className="flex justify-between items-center mb-4">Banners
@@ -54,13 +78,13 @@ const BannersTable = (banners:any) => {
             </tr>
           </thead>
           <tbody>
-            {banners.banners?.map((banners:any, index:number) => (
+            {banners.banners?.map((banner:any, index:number) => (
               <tr key={index}>
                 <td
                   className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5 border-b`}
                 >
                   <h5 className="text-dark dark:text-white">
-                    {banners.category}
+                    {banner.category}
                   </h5>
                 </td>
                 <td
@@ -86,11 +110,11 @@ const BannersTable = (banners:any) => {
                   </p>
                 </td> */}
                 <td
-                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 ${index === banners.length - 1 ? "border-b-0" : "border-b"}`}
+                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 border-b`}
                 >
                   <div className="flex items-center justify-end space-x-3.5">
                     <button className="hover:text-primary">
-                    <Link href={"/admin/banners/edit"}>
+                    <Link href={`/admin/banners/edit/${banner._id}`}>
                         <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -110,7 +134,9 @@ const BannersTable = (banners:any) => {
                             </svg>
                     </Link>
                     </button>
-                    <button className="hover:text-primary">
+                    <button
+                    onClick={() => deleteBanner(banner._id)}
+                     className="hover:text-primary">
                       <svg
                         className="fill-current"
                         width="20"

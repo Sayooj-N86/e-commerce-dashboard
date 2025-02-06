@@ -19,6 +19,7 @@ import { Controller, useForm } from "react-hook-form";
 import DropzoneWrapper from "../styles/react-dropzoner/Index";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import SelectOne from "../Dropdowns/SelectOne";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES =[
@@ -28,18 +29,33 @@ const ACCEPTED_IMAGE_TYPES =[
     "image/webp",
 ];
 const Schema = z.object( {
-    product : z.string().nonempty({message:"required"}),
+    category : z.string().nonempty({message:"required"}),
+    brand : z.string().nonempty({message:"required"}),
+    price: z.any(),
+    description: z.string().nonempty({message:"required"}),
     imageFile :
     z
-.any()
-.refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-.refine(
-  (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-  "Only .jpg, .jpeg, .png and .webp formats are supported.",
-),
+    .any().refine(
+      value => {
+        const acceptedTypes = ACCEPTED_IMAGE_TYPES
+  
+        if (typeof value === 'string') {
+          return true
+        } else if (typeof value === 'object') {
+          const isTypeAccepted = acceptedTypes.includes(value?.type)
+  
+          return isTypeAccepted
+        }
+  
+        return false
+      },
+      {
+        message: 'Invalid image format'
+      }
+    ),
 });
 
-const ProductAdd = () => {
+const ProductAdd = ({categories,brands}:any) => {
     
     const { register, handleSubmit,reset,control,formState:{errors}} = useForm<TSchema>({
     resolver: zodResolver(Schema)
@@ -67,12 +83,52 @@ const ProductAdd = () => {
                 </label>
                 <input
                   type="text"
-                  {...register("product",{required:true})}
-                  placeholder="Clothes"
+                  {...register("category",{required:true})}
+                  placeholder="name of the product"
                   className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
                 />
-                {errors.product && (<p>{errors.product.message}</p>)}
-              </div>
+                </div>
+                <div>
+                  <SelectOne
+                  register={register("category")}
+                  name="category"
+                  placeHolder="category"
+                  data={categories}
+                  />
+                  {errors.category && (<p>{errors.category.message}</p>)}
+                </div>
+                <div>
+                  <SelectOne
+                  register={register("brand")}
+                  name="brand"
+                  placeHolder="brand"
+                  data={brands}
+                  />
+                  {errors.brand && (<p>{errors.brand.message}</p>)}
+                </div>
+                <div>
+                <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
+                  Prize
+                </label>
+                <input
+                  type="text"
+                  {...register("category",{required:true})}
+                  placeholder="prize"
+                  className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+                />
+                </div>
+                <div>
+                <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
+                  product description
+                </label>
+                <textarea
+                rows={5}
+                  {...register("category",{required:true})}
+                  placeholder="product description"
+                  className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+                />
+                </div>
+              
               <div>
                   <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
                     Product Image
