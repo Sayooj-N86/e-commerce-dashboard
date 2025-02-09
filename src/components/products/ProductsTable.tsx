@@ -1,34 +1,58 @@
+'use client';
+import { productApi } from "@/api/productApi";
 import { Package } from "@/types/package";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
-const packageData: Package[] = [
-  {
-    name: "Free package",
-    price: 0.0,
-    invoiceDate: `Jan 13,2023`,
-    status: "Paid",
-  },
-  {
-    name: "Standard Package",
-    price: 59.0,
-    invoiceDate: `Jan 13,2023`,
-    status: "Paid",
-  },
-  {
-    name: "Business Package",
-    price: 99.0,
-    invoiceDate: `Jan 13,2023`,
-    status: "Unpaid",
-  },
-  {
-    name: "Standard Package",
-    price: 59.0,
-    invoiceDate: `Jan 13,2023`,
-    status: "Pending",
-  },
-];
+// const packageData: Package[] = [
+//   {
+//     name: "Free package",
+//     price: 0.0,
+//     invoiceDate: `Jan 13,2023`,
+//     status: "Paid",
+//   },
+//   {
+//     name: "Standard Package",
+//     price: 59.0,
+//     invoiceDate: `Jan 13,2023`,
+//     status: "Paid",
+//   },
+//   {
+//     name: "Business Package",
+//     price: 99.0,
+//     invoiceDate: `Jan 13,2023`,
+//     status: "Unpaid",
+//   },
+//   {
+//     name: "Standard Package",
+//     price: 59.0,
+//     invoiceDate: `Jan 13,2023`,
+//     status: "Pending",
+//   },
+// ];
 
-const ProductTable = () => {
+const ProductTable = (products:any) => {
+  console.log(products)
+
+  const router= useRouter();
+
+  async function deleteProduct(productId : string) {
+    try {
+      const deleteProduct= await productApi.deleteProduct(productId);
+      if(deleteProduct.data.success){
+        toast.success(deleteProduct.data.message);
+        router.refresh();
+      }
+      if(!deleteProduct.data.success){
+        toast.error(deleteProduct.data.message);
+      }
+      } catch (errors:any) {
+        console.log(errors)
+        toast.error(errors.response.data.message)
+      }
+  }
+
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
         <div className="flex justify-between items-center mb-4">Products
@@ -37,62 +61,61 @@ const ProductTable = () => {
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
-            <tr className="bg-[#F7F9FC] text-left dark:bg-dark-2">
+            <tr className="bg-[#F7F9FC] text-left dark:bg-dark-2 ">
               <th className="min-w-[220px] px-4 py-4 font-medium text-dark dark:text-white xl:pl-7.5">
-                Package
+                Product
               </th>
-              {/* <th className="min-w-[150px] px-4 py-4 font-medium text-dark dark:text-white">
-                Invoice date
+              <th className="min-w-[150px] px-4 py-4 font-medium text-dark dark:text-white">
+                Price
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-dark dark:text-white">
-                Status
-              </th> */}
+                Category
+              </th>
+              <th className="min-w-[120px] px-4 py-4 font-medium text-dark dark:text-white">
+                Brand
+              </th>
               <th className="px-4 py-4 text-right font-medium text-dark dark:text-white xl:pr-7.5">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {packageData.map((packageItem, index) => (
+            {products.products?.map((products:any, index:number) => (
               <tr key={index}>
                 <td
                   className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5 border-b`}
                 >
                   <h5 className="text-dark dark:text-white">
-                    {packageItem.name}
+                    {products.name}
                   </h5>
-                  {/* <p className="mt-[3px] text-body-sm font-medium">
-                    ${packageItem.price}
-                  </p> */}
                 </td>
-                {/* <td
-                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 ${index === packageData.length - 1 ? "border-b-0" : "border-b"}`}
-                >
-                  <p className="text-dark dark:text-white">
-                    {packageItem.invoiceDate}
-                  </p>
-                </td>
-                <td
-                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 ${index === packageData.length - 1 ? "border-b-0" : "border-b"}`}
-                >
-                  <p
-                    className={`inline-flex rounded-full px-3.5 py-1 text-body-sm font-medium ${
-                      packageItem.status === "Paid"
-                        ? "bg-[#219653]/[0.08] text-[#219653]"
-                        : packageItem.status === "Unpaid"
-                          ? "bg-[#D34053]/[0.08] text-[#D34053]"
-                          : "bg-[#FFA70B]/[0.08] text-[#FFA70B]"
-                    }`}
+                  <td
+                    className={`border-[#eee] px-4 py-4 dark:border-dark-3 border-b`}
                   >
-                    {packageItem.status}
-                  </p>
-                </td> */}
+                    <p className="text-dark dark:text-white">
+                      {products.price}
+                    </p>
+                  </td>
+                  <td
+                    className={`border-[#eee] px-4 py-4 dark:border-dark-3 border-b`}
+                  >
+                    <p className="text-dark dark:text-white">
+                      {products.category}
+                    </p>
+                  </td>
+                  <td
+                    className={`border-[#eee] px-4 py-4 dark:border-dark-3 border-b`}
+                  >
+                    <p className="text-dark dark:text-white">
+                      {products.brand}
+                    </p>
+                  </td>
                 <td
                   className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 border-b`}
                 >
                   <div className="flex items-center justify-end space-x-3.5">
                     <button className="hover:text-primary">
-                    <Link href={"/admin/products/edit"}>
+                    <Link href={`/admin/products/edit/${products._id}`}>
                         <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -112,7 +135,9 @@ const ProductTable = () => {
                             </svg>
                     </Link>
                     </button>
-                    <button className="hover:text-primary">
+                    <button 
+                    onClick={() => deleteProduct(products._id)}
+                    className="hover:text-primary">
                       <svg
                         className="fill-current"
                         width="20"

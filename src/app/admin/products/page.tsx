@@ -12,12 +12,13 @@ return response.data;
 
 const page = async () => {
   const products = await getAllProducts();
-
+  const productData = products.data;
+  console.log(productData);
  
     
   return (
    <DefaultLayout>
-    <ProductTable />
+    <ProductTable products={productData}/>
    </DefaultLayout>
   )
 }

@@ -20,16 +20,20 @@ import DropzoneWrapper from "../styles/react-dropzoner/Index";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SelectOne from "../Dropdowns/SelectOne";
+import { productApi } from "@/api/productApi";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES =[
     "image/jpg",
-    "image/jpeg",
+    "image/jpeg", 
     "image/png",
     "image/webp",
 ];
 const Schema = z.object( {
     category : z.string().nonempty({message:"required"}),
+    product : z.string().nonempty({message:"required"}),
     brand : z.string().nonempty({message:"required"}),
     price: z.any(),
     description: z.string().nonempty({message:"required"}),
@@ -62,7 +66,23 @@ const ProductAdd = ({categories,brands}:any) => {
     })
     type TSchema = z.infer<typeof Schema>;
 
+    const router = useRouter();
+
     const submitData = async (data:any)=>{
+      try{
+        const response = await productApi.createProduct(data);
+        console.log(response);
+        if(response.data.success){
+          toast.success(response.data.message);
+          router.push("/admin/products");
+         
+        }
+      }
+      catch(errors: any){
+        console.log(errors);
+        toast.error(errors.response.data.message)
+      }
+
         console.log("::::",data)
 
     }
@@ -76,14 +96,14 @@ const ProductAdd = ({categories,brands}:any) => {
         <div className="flex flex-col gap-9">
           {/* <!-- Input Fields --> */}
           <div className="rounded-[10px] border border-stroke bg-white shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card">
-            <div className="flex flex-col gap-5.5 p-6.5">
+            <div className="flex flex-col gap-5.5 p-6.5 ">
               <div>
                 <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
                   Product Name
                 </label>
                 <input
                   type="text"
-                  {...register("category",{required:true})}
+                  {...register("product",{required:true})}
                   placeholder="name of the product"
                   className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
                 />
@@ -108,12 +128,12 @@ const ProductAdd = ({categories,brands}:any) => {
                 </div>
                 <div>
                 <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-                  Prize
+                  Price
                 </label>
                 <input
                   type="text"
-                  {...register("category",{required:true})}
-                  placeholder="prize"
+                  {...register("price",{required:true})}
+                  placeholder="price"
                   className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
                 />
                 </div>
@@ -123,7 +143,7 @@ const ProductAdd = ({categories,brands}:any) => {
                 </label>
                 <textarea
                 rows={5}
-                  {...register("category",{required:true})}
+                  {...register("description",{required:true})}
                   placeholder="product description"
                   className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
                 />
