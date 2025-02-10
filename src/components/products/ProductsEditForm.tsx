@@ -35,7 +35,7 @@ const Schema = z.object({
   category: z.string().nonempty({ message: "required" }),
   product: z.string().nonempty({ message: "required" }),
   brand: z.string().nonempty({ message: "required" }),
-  price: z.any(),
+  price: z.string().nonempty({ message: "required" }),
   description: z.string().nonempty({message:"required"}),
   imageFile: z.any().refine(
     (value) => {
@@ -61,12 +61,10 @@ type props = {
   product: any;
   category: any;
   brand: any;
-  price:number;
-  description:string;
   productId: string;
 };
 
-const ProductsEdit = ({ product, category, brand, productId,price,description }: props) => {
+const ProductsEdit = ({ product, category, brand, productId }: props) => {
   console.log(";;;");
 
   const {
@@ -160,7 +158,7 @@ const ProductsEdit = ({ product, category, brand, productId,price,description }:
                 </div>
                 <div>
                   <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-                   price
+                   description
                   </label>
                   <textarea
                     rows={5}

@@ -22,6 +22,9 @@ export const productApi = {
                 },
             });
         },
+        featuredProduct: async function (id:string){
+            return await axiosClient.put(`products/featured/${id}`);
+        },
         deleteProduct: async function (id:string) {
                 return await axiosClient.delete(`products/delete/${id}`);
             },

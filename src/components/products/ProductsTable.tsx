@@ -52,6 +52,21 @@ const ProductTable = (products:any) => {
         toast.error(errors.response.data.message)
       }
   }
+  async function featuredProduct(productId : string) {
+    try {
+      const featuredproduct= await productApi.featuredProduct(productId);
+      if(featuredproduct.data.success){
+        toast.success(featuredproduct.data.message);
+        router.refresh();
+      }
+      if(!featuredproduct.data.success){
+        toast.error(featuredproduct.data.message);
+      }
+      } catch (errors:any) {
+        console.log(errors)
+        toast.error(errors.response.data.message)
+      }
+  }
 
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
@@ -73,6 +88,9 @@ const ProductTable = (products:any) => {
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-dark dark:text-white">
                 Brand
+              </th>
+              <th className="min-w-[120px] px-4 py-4 font-medium text-dark dark:text-white">
+                featured
               </th>
               <th className="px-4 py-4 text-right font-medium text-dark dark:text-white xl:pr-7.5">
                 Actions
@@ -110,6 +128,28 @@ const ProductTable = (products:any) => {
                       {products.brand}
                     </p>
                   </td>
+                  <td
+                    className={`border-[#eee] px-4 py-4 dark:border-dark-3 ${index === products.length - 1 ? "border-b-0" : "border-b"}`}
+                  >
+                    <label className="flex cursor-pointer select-none items-center">
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          className="sr-only"
+                          onChange={async () => {
+                            await featuredProduct(products._id);
+                          }}
+                        />
+                        <div className="block h-8 w-14 rounded-full bg-gray-3 dark:bg-[#5A616B]"></div>
+                        <div
+                          className={`absolute left-1 top-1 h-6 w-6 rounded-full bg-white shadow-switch-1 transition ${
+                            products.featured &&
+                            "!right-1 !translate-x-full !bg-primary dark:!bg-white"
+                          }`}
+                        ></div>
+                      </div>
+                    </label>
+                  </td> 
                 <td
                   className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 border-b`}
                 >
