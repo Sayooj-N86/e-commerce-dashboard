@@ -5,6 +5,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { authApi } from "@/api/authApi";
+import toast from "react-hot-toast";
+import { json } from "stream/consumers";
 
 const Schema = z.object( {
     email : z.string().nonempty({message:"*required"}),
@@ -22,7 +25,22 @@ const { register, handleSubmit,reset,control,formState:{errors}} = useForm<TSche
 const router = useRouter();
 
     const submitData = async (data:any)=>{
-        router.push("/")
+      try{
+        const response = await authApi.login(data);
+        console.log(response);
+        if(response.data.success){
+          window.localStorage.setItem('accesstoken',response.data.accessToken);
+          window.localStorage.setItem('userdata',JSON.stringify(response.data.userData));
+          toast.success('login successful');
+          router.push("/admin/category");
+         
+        }
+      }
+      catch(errors: any){
+        console.log(errors);
+        toast.error(errors.response.data);
+      }
+      
         console.log("::::",data)
 
     }

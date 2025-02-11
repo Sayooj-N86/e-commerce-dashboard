@@ -8,7 +8,7 @@ const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
   const logout = () => {
-    router.push("login");
+    router.push("/login");
   };
 
   return (

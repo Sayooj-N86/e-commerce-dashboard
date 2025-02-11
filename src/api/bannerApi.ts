@@ -7,7 +7,7 @@ export const bannerApi = {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
-            });
+            }); 
         },
         getAllBanners: async function () {
             return await axiosClient.get("banners/get-all");
