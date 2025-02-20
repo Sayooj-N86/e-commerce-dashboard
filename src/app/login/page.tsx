@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { authApi } from "@/api/authApi";
 import toast from "react-hot-toast";
 import { json } from "stream/consumers";
+import Cookies from 'js-cookie';
 
 const Schema = z.object( {
     email : z.string().nonempty({message:"*required"}),
@@ -29,8 +30,9 @@ const router = useRouter();
         const response = await authApi.login(data);
         console.log(response);
         if(response.data.success){
-          window.localStorage.setItem('accesstoken',response.data.accessToken);
+          window.localStorage.setItem('accessToken',response.data.accessToken);
           window.localStorage.setItem('userdata',JSON.stringify(response.data.userData));
+          Cookies.set('accessToken',response.data.accessToken);
           toast.success('login successful');
           router.push("/admin/category");
          

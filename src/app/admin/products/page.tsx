@@ -3,10 +3,13 @@ import { categoryApi } from '@/api/categoryApi';
 import { productApi } from '@/api/productApi';
 import DefaultLayout from '@/components/Layouts/DefaultLaout'
 import ProductTable from '@/components/products/ProductsTable'
+import { cookies } from 'next/headers';
 import React from 'react'
 
 async function getAllProducts(){
-const response:any = await productApi.getAllProducts();
+  const serverCookies = cookies();
+  const accessToken = serverCookies.get('accessToken')?.value;
+const response:any = await productApi.getAllProducts(accessToken);
 return response.data;
 }
 

@@ -2,12 +2,15 @@ import { brandApi } from '@/api/brandApi';
 import { categoryApi } from '@/api/categoryApi';
 import DefaultLayout from '@/components/Layouts/DefaultLaout'
 import ProductAdd from '@/components/products/ProductsAddForm'
+import { cookies } from 'next/headers';
 import React from 'react'
 
 
 async function getAllCategory(){
-  const response:any= await categoryApi.getAllCategory();
-  const response1:any= await brandApi.getAllBrands();
+  const serverCookies = cookies();
+    const accesToken = serverCookies.get('accessToken')?.value;
+  const response:any= await categoryApi.getAllCategory(accesToken);
+  const response1:any= await brandApi.getAllBrands(accesToken);
   return {response:response.data,response1:response1.data};
 }
 

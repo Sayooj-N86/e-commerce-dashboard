@@ -3,11 +3,15 @@ import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
 import { useRouter } from "next/navigation";
+import Cookies from 'js-cookie';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
   const logout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userdata");
+    Cookies.remove("accessToken");
     router.push("/login");
   };
 
