@@ -75,6 +75,7 @@ const ProductAdd = ({categories,brands}:any) => {
         if(response.data.success){
           toast.success(response.data.message);
           router.push("/admin/products");
+          router.refresh();
          
         }
       }

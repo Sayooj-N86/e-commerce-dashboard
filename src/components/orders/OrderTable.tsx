@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 
-const CategoryTable = (categories:any) => {
+const OrderTable = (categories:any) => {
   console.log(categories)
 
   const router= useRouter();
@@ -28,15 +28,15 @@ const CategoryTable = (categories:any) => {
 
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
-        <div className="flex justify-between items-center mb-4">Category
-           <Link href={"/admin/category/add"}> <button className="text-sm text-white bg-black p-2 rounded-xl">Add Category</button></Link>
+        <div className="flex justify-between items-center mb-4">Orders
+           {/* <Link href={"/admin/category/add"}> <button className="text-sm text-white bg-black p-2 rounded-xl">Add Category</button></Link> */}
         </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-[#F7F9FC] text-left dark:bg-dark-2">
               <th className="min-w-[220px] px-4 py-4 font-medium text-dark dark:text-white xl:pl-7.5">
-               category name
+              Order Details
               </th>
               
               <th className="px-4 py-4 text-right font-medium text-dark dark:text-white xl:pr-7.5">
@@ -125,4 +125,4 @@ const CategoryTable = (categories:any) => {
   );
 };
 
-export default CategoryTable;
+export default OrderTable;

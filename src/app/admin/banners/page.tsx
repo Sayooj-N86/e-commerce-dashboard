@@ -1,5 +1,5 @@
 import { bannerApi } from '@/api/bannerApi'
-import { categoryApi } from '@/api/categoryApi'
+// import { categoryApi } from '@/api/categoryApi'
 import BannersTable from '@/components/banners/BannerTable'
 import DefaultLayout from '@/components/Layouts/DefaultLaout'
 import { cookies } from 'next/headers'

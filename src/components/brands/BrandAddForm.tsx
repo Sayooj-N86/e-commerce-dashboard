@@ -57,7 +57,7 @@ const BrandsAdd = () => {
         if(response.data.success){
           toast.success(response.data.message);
           router.push("/admin/brands");
-         
+         router.refresh();
         }
       }
       catch(errors: any){
